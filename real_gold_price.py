@@ -40,20 +40,20 @@ class RealGoldPriceFetcher:
             from bank_gold_price import get_bank_gold_data
             bank_data = get_bank_gold_data()
             if bank_data and bank_data.get('price'):
-                logging.info(f"从银行数据源获取价格: {bank_data['price']}元/克")
+                logging.info("从银行数据源获取价格: %s元/克", bank_data['price'])
                 return bank_data
         except Exception as e:
-            logging.warning(f"银行数据源失败: {e}")
+            logging.warning("银行数据源失败: %s", e)
 
         # 尝试API数据源
         try:
-            from gold_api import get_real_gold_price
-            api_data = get_real_gold_price()
+            from gold_api import get_real_gold_price as get_gold_price_from_api
+            api_data = get_gold_price_from_api()
             if api_data and api_data.get('price'):
-                logging.info(f"从API数据源获取价格: {api_data['price']}元/克")
+                logging.info("从API数据源获取价格: %s元/克", api_data['price'])
                 return api_data
         except Exception as e:
-            logging.warning(f"API数据源失败: {e}")
+            logging.warning("API数据源失败: %s", e)
 
         # 当所有数据源都不可用时，返回合理的估算价格
         logging.warning("所有真实数据源均失败，使用估算价格")

@@ -23,7 +23,7 @@ class GoldPriceScheduler:
     def fetch_and_store_price(self):
         """获取并存储黄金价格"""
         try:
-            self.logger.info(f"开始获取水贝金价... {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            self.logger.info("开始获取水贝金价... %s", datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
             # 获取价格数据
             price_data = self.scraper.get_gold_price()
@@ -38,7 +38,7 @@ class GoldPriceScheduler:
                 print(f"🔴 [{datetime.now().strftime('%H:%M:%S')}] 获取失败: {price_data.get('error', '未知错误')}")
 
         except Exception as e:
-            self.logger.error(f"获取和存储金价时发生错误: {e}")
+            self.logger.error("获取和存储金价时发生错误: %s", e)
             print(f"🔴 [{datetime.now().strftime('%H:%M:%S')}] 错误: {e}")
 
     def setup_schedule(self):
@@ -49,7 +49,7 @@ class GoldPriceScheduler:
         # 立即执行一次
         self.fetch_and_store_price()
 
-        self.logger.info(f"定时任务已设置，每 {self.interval_minutes} 分钟执行一次")
+        self.logger.info("定时任务已设置，每 %s 分钟执行一次", self.interval_minutes)
         print(f"⏰ 定时任务已启动，每 {self.interval_minutes} 分钟获取一次水贝金价")
 
     def run_scheduler(self):
@@ -65,7 +65,7 @@ class GoldPriceScheduler:
             self.logger.info("收到中断信号，停止调度器")
             print("\n🛑 收到中断信号，停止调度器...")
         except Exception as e:
-            self.logger.error(f"调度器运行错误: {e}")
+            self.logger.error("调度器运行错误: %s", e)
             print(f"❌ 调度器错误: {e}")
         finally:
             self.is_running = False

@@ -44,7 +44,7 @@ class BankGoldPrice:
             }
 
         except Exception as e:
-            logging.error(f"获取工商银行金价失败: {e}")
+            logging.error("获取工商银行金价失败: %s", e)
 
         return None
 
@@ -66,7 +66,7 @@ class BankGoldPrice:
                 }
 
         except Exception as e:
-            logging.error(f"获取中国银行金价失败: {e}")
+            logging.error("获取中国银行金价失败: %s", e)
 
         return None
 
@@ -87,7 +87,7 @@ class BankGoldPrice:
                 }
 
         except Exception as e:
-            logging.error(f"获取建设银行金价失败: {e}")
+            logging.error("获取建设银行金价失败: %s", e)
 
         return None
 

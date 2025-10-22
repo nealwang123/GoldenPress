@@ -74,7 +74,7 @@ class ShuiBeiGoldPriceScraper:
                 }
 
         except Exception as e:
-            logging.error(f"从黄金网获取水贝金价失败: {e}")
+            logging.error("从黄金网获取水贝金价失败: %s", e)
 
         return None
 
@@ -103,7 +103,7 @@ class ShuiBeiGoldPriceScraper:
                         }
 
         except Exception as e:
-            logging.error(f"从金投网获取水贝金价失败: {e}")
+            logging.error("从金投网获取水贝金价失败: %s", e)
 
         return None
 
@@ -131,7 +131,7 @@ class ShuiBeiGoldPriceScraper:
                     }
 
         except Exception as e:
-            logging.error(f"从新浪财经获取黄金价格失败: {e}")
+            logging.error("从新浪财经获取黄金价格失败: %s", e)
 
         return None
 
@@ -165,10 +165,10 @@ class ShuiBeiGoldPriceScraper:
         try:
             api_price = get_real_gold_price()
             if api_price and api_price.get('price'):
-                logging.info(f"从API成功获取水贝金价估算: {api_price['price']}元/克")
+                logging.info("从API成功获取水贝金价估算: %s元/克", api_price['price'])
                 return api_price
         except Exception as e:
-            logging.warning(f"API获取失败，尝试网页数据源: {e}")
+            logging.warning("API获取失败，尝试网页数据源: %s", e)
 
         # 如果API失败，按优先级尝试不同的网页数据源
         price_data = None
@@ -176,19 +176,19 @@ class ShuiBeiGoldPriceScraper:
         # 首先尝试金投网
         price_data = self.get_shuibei_price_from_cngold()
         if price_data:
-            logging.info(f"从金投网成功获取水贝金价: {price_data['price']}元/克")
+            logging.info("从金投网成功获取水贝金价: %s元/克", price_data['price'])
             return price_data
 
         # 然后尝试黄金网
         price_data = self.get_shuibei_price_from_gold_org()
         if price_data:
-            logging.info(f"从黄金网成功获取水贝金价: {price_data['price']}元/克")
+            logging.info("从黄金网成功获取水贝金价: %s元/克", price_data['price'])
             return price_data
 
         # 最后尝试新浪财经作为备选
         price_data = self.get_shuibei_price_from_sina()
         if price_data:
-            logging.info(f"从新浪财经获取黄金价格: {price_data['price']}元/克")
+            logging.info("从新浪财经获取黄金价格: %s元/克", price_data['price'])
             return price_data
 
         # 如果所有数据源都失败

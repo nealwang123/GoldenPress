@@ -54,7 +54,7 @@ class GoldPriceAPI:
                     'raw_data': quote
                 }
         except Exception as e:
-            logging.error(f"解析Alpha Vantage数据失败: {e}")
+            logging.error("解析Alpha Vantage数据失败: %s", e)
         return None
 
     def _parse_metalpriceapi(self, data: dict) -> Optional[Dict]:
@@ -68,14 +68,14 @@ class GoldPriceAPI:
                     'raw_data': data
                 }
         except Exception as e:
-            logging.error(f"解析MetalPriceAPI数据失败: {e}")
+            logging.error("解析MetalPriceAPI数据失败: %s", e)
         return None
 
     def get_gold_price_from_api(self) -> Optional[Dict]:
         """从API获取黄金价格"""
         for api in self.api_endpoints:
             try:
-                logging.info(f"尝试从 {api['name']} 获取数据...")
+                logging.info("尝试从 %s 获取数据...", api['name'])
                 response = self.session.get(api['url'], params=api['params'], timeout=10)
                 response.raise_for_status()
 
@@ -92,7 +92,7 @@ class GoldPriceAPI:
                     }
 
             except Exception as e:
-                logging.error(f"从 {api['name']} 获取数据失败: {e}")
+                logging.error("从 {api['name']} 获取数据失败: %s", e)
                 continue
 
         return None
