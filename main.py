@@ -63,14 +63,14 @@ def test_data_sources():
     """测试所有数据源的连接情况"""
     print("🔧 测试数据源连接...")
     print("=" * 60)
-    
+
     scraper = ShuiBeiGoldPriceScraper()
-    
+
     for i, source in enumerate(scraper.data_sources, 1):
         print(f"\n{i}. 测试: {source['name']}")
         print(f"   网址: {source['url']}")
         print(f"   描述: {source['description']}")
-        
+
         try:
             response = scraper.session.get(source['url'], timeout=10)
             if response.status_code == 200:
@@ -84,11 +84,11 @@ def test_data_sources():
 def export_data(output_file=None):
     """导出数据到Excel"""
     storage = GoldPriceStorage()
-    
+
     if output_file is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_file = f"水贝金价数据_{timestamp}.xlsx"
-    
+
     try:
         storage.export_to_excel(output_file)
         print(f"✅ 数据已成功导出到: {output_file}")
@@ -99,7 +99,7 @@ def export_data(output_file=None):
 def main():
     """主函数"""
     print_banner()
-    
+
     parser = argparse.ArgumentParser(
         description='水贝黄金价格实时监控系统',
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -114,50 +114,50 @@ def main():
   %(prog)s export                    # 导出数据到Excel
         """
     )
-    
+
     parser.add_argument(
-        'mode', 
+        'mode',
         choices=['single', 'schedule', 'stats', 'test', 'export', 'help', 'clear'],
         nargs='?',
         default='single',
         help='运行模式: single(单次), schedule(定时), stats(统计), test(测试), export(导出), help(帮助), clear(清除数据)'
     )
-    
+
     parser.add_argument(
-        '--interval', 
-        type=int, 
+        '--interval',
+        type=int,
         default=1,
         help='定时模式下的间隔分钟数 (默认: 1分钟)'
     )
-    
+
     parser.add_argument(
-        '--days', 
-        type=int, 
+        '--days',
+        type=int,
         default=7,
         help='统计模式显示最近N天的数据 (默认: 7天)'
     )
-    
+
     parser.add_argument(
         '--file',
         help='导出文件的路径'
     )
-    
+
     # 如果没有参数，显示使用说明
     if len(sys.argv) == 1:
         print_usage()
         return
-    
+
     args = parser.parse_args()
-    
+
     try:
         if args.mode == 'single':
             print("🔍 单次获取水贝金价...")
             run_single_fetch()
-            
+
         elif args.mode == 'schedule':
             print(f"⏰ 启动定时监控，每 {args.interval} 分钟获取一次...")
             scheduler = GoldPriceScheduler(interval_minutes=args.interval)
-            
+
             try:
                 scheduler.start()
                 # 保持主线程运行
@@ -170,25 +170,25 @@ def main():
             except Exception as e:
                 print(f"❌ 发生错误: {e}")
                 scheduler.stop()
-                
+
         elif args.mode == 'stats':
             print(f"📊 显示最近 {args.days} 天的统计信息...")
             show_statistics()
-            
+
         elif args.mode == 'test':
             test_data_sources()
-            
+
         elif args.mode == 'export':
             export_data(args.file)
-            
+
         elif args.mode == 'help':
             print_usage()
-            
+
         elif args.mode == 'clear':
             print("🗑️  正在清除所有历史数据...")
             storage = GoldPriceStorage()
             storage.clear_all_data()
-            
+
     except KeyboardInterrupt:
         print("\n\n🛑 程序被用户中断")
     except Exception as e:
